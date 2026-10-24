@@ -21,3 +21,25 @@ def test_create_meme(api_client):
     get_meme.assert_all_params(body=body)
 
     delete_meme.delete(meme_id)
+
+def test_create_meme_not_valid(api_client):
+    user = 'Kirill'
+    client = api_client(user)
+    create_meme = client.create_meme_client
+
+    invalid_body = create_meme.test_body_constructor(info=None)
+    create_meme.create(body=invalid_body)
+
+    create_meme.assert_status_400()
+    create_meme.assert_response_not_null()
+    create_meme.assert_text_response('Invalid parameters')
+
+def test_create_meme_not_auth(api_client_no_auth):
+    create_meme = api_client_no_auth.create_meme_client
+
+    body = create_meme.test_body_constructor()
+    create_meme.create(body=body)
+
+    create_meme.assert_status_401()
+    create_meme.assert_response_not_null()
+    create_meme.assert_text_response('Unauthorized')

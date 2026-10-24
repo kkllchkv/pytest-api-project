@@ -20,8 +20,17 @@ class Endpoint:
     def assert_status_400(self):
         assert self.response.status_code == 400, 'Статус ответа != 400'
 
+    def assert_status_401(self):
+        assert self.response.status_code == 401, 'Статус ответа != 401'
+
+    def assert_status_403(self):
+        assert self.response.status_code == 403, 'Статус ответа != 403'
+
     def assert_status_404(self):
         assert self.response.status_code == 404, 'Статус ответа != 404'
+
+    def assert_text_response(self, text):
+        assert text in self.response.text
 
     def assert_response_not_null(self):
         # для POST / PUT / GET методов, у которых в теле ответа - json
@@ -33,8 +42,8 @@ class Endpoint:
         else:
             raise AssertionError('Не получилось подобрать подходящий формат тела ответа')
 
-    def assert_param(self, body: dict, param):
-        assert self.response_json[param] == body[param], f'Параметр {param} не обновлен'
+    def assert_param(self, body: dict, body_param, response_param):
+        assert self.response_json[response_param] == body[body_param], f'Параметр {body_param} не обновлен'
 
     def assert_all_params(self, body: dict, need_id=False):
         required_data = self.response_json.copy()
@@ -108,10 +117,9 @@ class Endpoint:
 
         if kwargs:
             for key, new_value in kwargs.items():
-                if default_body.get(key) and type(kwargs[key]) != type(default_body[key]):
-                    # сравнение типов данных для параметров дефолтного тела запроса
-                    continue
-
+                # if default_body.get(key) and type(kwargs[key]) != type(default_body[key]):
+                #     # сравнение типов данных для параметров дефолтного тела запроса
+                #     continue
                 default_body[key] = new_value
 
         return default_body

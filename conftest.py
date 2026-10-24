@@ -5,6 +5,7 @@ from api_client import ApiClient
 
 @pytest.fixture()
 def api_client():
+    # фикстура для создания авторизованных апи-клиентов
     authed_users = {}
 
     def init_api_client(user):
@@ -18,6 +19,13 @@ def api_client():
         return client
 
     return init_api_client
+
+
+@pytest.fixture()
+def api_client_no_auth():
+    # фикстура для теста методов авторизации
+    # создает ApiClient без токен-менеджера и стороннних апи-клиентов
+    return ApiClient(need_auto_auth=False)
 
 
 @pytest.fixture(scope='function')

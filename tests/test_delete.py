@@ -38,9 +38,17 @@ def test_delete_not_existing_meme(api_client):
 
 def test_delete_other_user_meme(api_client):
     user = 'Kirill'
-    meme_id = 3
+    meme_id = None
     client = api_client(user)
+    get_meme = client.get_meme_client
     delete_meme = client.delete_meme_client
+
+    get_meme.get_all()
+    all_memes = get_meme.response_json["data"]
+    for meme in all_memes:
+        if meme["updated_by"] != user:
+            meme_id = meme["id"]
+            break
 
     delete_meme.delete(meme_id=meme_id)
 

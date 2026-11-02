@@ -59,25 +59,6 @@ class Endpoint:
                                        f'Ожидаемые данные: {required_data}',
                                        f'Подаваемые данные: {body}')
 
-    def assert_nested_param(self, body: dict, path_to_param: str):
-        """
-        проверка вложенных значений в ответе метода
-        структура ответа:
-        {"id": "", "info": { "colors": [],"objects": [] },"tags": [],"text": "", "updated_by": "", "url": ""}
-        """
-
-        params = path_to_param.split('.')
-        nested_value_response = self.response_json.copy()
-        nested_value_request = body.copy()
-
-        for param in params:
-            nested_value_response = nested_value_response[param]
-            nested_value_request = nested_value_request[param]
-
-        print(nested_value_response)
-        print(nested_value_request)
-        assert nested_value_response == nested_value_request, f'Параметр {path_to_param} не обновлен'
-
     def assert_has_required_keys(self):
         """проверка наличия обязательных ключей в ответе метода"""
         required_keys = {"id", "url", "text", "tags", "info", "updated_by"}

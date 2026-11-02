@@ -31,5 +31,3 @@ class UpdateMeme(Endpoint):
                 print(f'Ответ: {self.response.text}')
 
                 self.response.raise_for_status()
-
-        self.response_json = self.response.json()
